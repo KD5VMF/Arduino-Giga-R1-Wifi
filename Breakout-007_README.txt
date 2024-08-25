@@ -48,4 +48,4 @@ Feel free to contribute to this project by submitting pull requests or opening i
 Acknowledgements
 KD5VMF: Project creator and code implementation.
 ChatGPT (OpenAI): Assisted in developing advanced features, including persistent data tracking, multi-core utilization,
-and graphical optimizations.
+and graphical optimizations. <-- More like it wrote it for me with my help. I gave it what I was using for hardware and software, and some sample code. Find things that work and talk back and forth. This one took us about 8 hours to get done over two day. :)
