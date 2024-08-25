@@ -1,0 +1,90 @@
+Breakout Game for Arduino Giga Display
+This repository contains a Breakout-style game implemented for the Arduino Giga using the GigaDisplay. The game utilizes the full power of the Giga board's dual M7 cores and M4 core to deliver a smooth, high-performance gaming experience with dynamic difficulty progression.
+
+Overview
+In this Breakout-style game, players use a paddle to bounce a ball and break bricks. The objective is to clear all the bricks on the screen to advance to the next level. The game increases in difficulty as the player progresses through levels, with bricks becoming harder to destroy, the ball speeding up, and the paddle AI adapting accordingly.
+
+The game runs across three cores of the Arduino Giga board:
+
+M7 Core 1: Handles rendering tasks like drawing the ball, bricks, and paddle.
+M7 Core 2: Manages game logic, such as ball movement, collision detection, and AI paddle behavior.
+M4 Core: Exclusively handles updating the scoreboard to prevent flickering and ensure smooth graphics rendering on the main cores.
+Key Features
+Multi-Core Architecture:
+
+M7 Core 1 focuses on rendering the game (ball, bricks, paddle), ensuring smooth gameplay visuals.
+M7 Core 2 manages all game logic, including ball movement, collision detection, paddle AI, and level progression.
+M4 Core is responsible for handling scoreboard updates, minimizing flicker and enhancing overall display performance.
+Dynamic Difficulty:
+
+As the player progresses through the levels, the game's difficulty increases.
+Brick Strength: The number of hits required to destroy bricks increases with each level.
+Ball Speed: The ball speed increases after every level and after hitting the paddle.
+Paddle AI: The paddle AI becomes more intelligent and moves faster as the ball's speed increases.
+Smart Bricks:
+
+Each brick has two distinct zones:
+Top Half: The top half of each brick is three times harder to break than the bottom half.
+Bottom Half: Normal strength.
+This adds an additional challenge for the player to destroy bricks efficiently.
+Score and Miss Tracking:
+
+The player's score increases with every brick hit and decreases when the ball misses the paddle.
+The scoreboard displays the player's current score, number of misses, and the current level.
+After 100 levels, the game resets, allowing for endless play.
+Smooth Graphics:
+
+The game uses the GigaDisplay for rendering vibrant, smooth graphics, ensuring a seamless gameplay experience.
+The scoreboard is updated independently by the M4 core, reducing flickering and providing clear information without disrupting gameplay.
+Level Progression:
+
+The game resets after level 100, allowing the player to start over while maintaining a challenging experience.
+The paddle AI becomes more challenging as the player progresses through the levels, ensuring that even experienced players remain engaged.
+How It Works
+Core Breakdown
+M7 Core 1: Handles the rendering of game elements such as the ball, bricks, and paddle. It constantly updates the game display without handling the scoreboard, which helps reduce the graphical load and ensure smooth gameplay.
+
+M7 Core 2: Executes game logic, including ball movement, collision detection (ball and paddle, ball and bricks), paddle AI behavior, and level progression. This core ensures that the game rules and interactions are followed correctly.
+
+M4 Core: Exclusively responsible for updating the scoreboard, including the player's score, number of misses, and current level. By offloading the scoreboard rendering to the M4 core, the main game graphics are less prone to flickering or interruptions.
+
+Dynamic Brick Behavior
+Each brick requires a certain number of hits to be destroyed. If the ball hits the top half of the brick, it will take three times the normal number of hits to destroy that section, adding a strategic element to the gameplay.
+Game Flow
+The player uses a paddle to hit a ball that bounces around the screen, breaking bricks.
+Each brick destroyed increases the player's score. Missing the ball decreases the score and increases the number of misses.
+Once all bricks are destroyed, the player progresses to the next level, where brick strength and ball speed increase.
+Scoreboard
+The scoreboard is always visible on the left side of the screen and displays the following:
+Score: Current player score, updated based on brick hits and misses.
+Misses: Number of times the player missed the ball.
+Level: Current level, which increases after clearing all bricks.
+Level Reset
+After reaching level 100, the game resets all stats (score, level, misses) and restarts from level 1, allowing for endless gameplay.
+Getting Started
+Hardware Requirements
+Arduino Giga with GigaDisplay
+GigaDisplay library installed in your Arduino IDE
+Installation
+Clone or download the repository to your local machine.
+Open the .ino file in the Arduino IDE.
+Ensure you have the required GigaDisplay and Scheduler libraries installed.
+Upload the code to your Arduino Giga.
+How to Play
+The game starts automatically after uploading the code.
+Use the paddle to bounce the ball and break the bricks. Progress through levels by clearing all bricks.
+Track your score, misses, and level on the scoreboard.
+Customization
+You can easily customize various aspects of the game by adjusting the following variables at the top of the code:
+
+ballInitialSpeedX and ballInitialSpeedY: Control the initial speed of the ball.
+ballSize: Adjusts the size of the ball.
+paddleWidth: Changes the size of the paddle.
+brickHitRequirement: Sets the base number of hits required to destroy a brick.
+pointsPerBrickHit: Adjusts the number of points awarded per brick hit.
+pointsLostPerMiss: Sets how many points are lost when the ball misses the paddle.
+Contributions
+Feel free to fork this repository, submit pull requests, or open issues if you encounter any problems or have suggestions for improvements.
+
+License
+This project is licensed under the MIT License - see the LICENSE file for details.
