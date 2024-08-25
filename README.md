@@ -22,7 +22,7 @@ Dynamic Difficulty: Levels become progressively harder, with intelligent paddle 
 Advanced Brick Mechanics: Bricks have different hit zones, adding a strategic element to gameplay. Players must carefully consider how to break them efficiently.
 
 # Tic-Tac-Toe AI
-A Tic-Tac-Toe game with a smart AI opponent, optimized for the Giga Display. This project demonstrates:
+A Tic-Tac-Toe game with a smart AI to AI opponents, optimized for the Giga Display. This project demonstrates:
 
 # AI Learning: 
 The AI improves its strategy as the game progresses, offering a challenging experience for the player.
