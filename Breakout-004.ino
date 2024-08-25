@@ -65,7 +65,7 @@ float previousBallDX[3] = {0, 0, 0};
 float previousBallDY[3] = {0, 0, 0};
 int loopCount = 0;
 
-// Neon colors for bricks
+// Neon colors for bricks - Expanded to 35 colors
 uint16_t neonColors[] = {
     tft.color565(57, 255, 20),   // Neon green
     tft.color565(255, 0, 255),   // Neon magenta
@@ -76,7 +76,31 @@ uint16_t neonColors[] = {
     tft.color565(138, 43, 226),  // Neon purple
     tft.color565(124, 252, 0),   // Neon lime
     tft.color565(0, 191, 255),   // Neon sky blue
-    tft.color565(255, 20, 147)   // Neon deep pink
+    tft.color565(255, 20, 147),  // Neon deep pink
+    // Additional neon colors
+    tft.color565(127, 255, 212), // Aquamarine
+    tft.color565(0, 255, 127),   // Spring green
+    tft.color565(255, 215, 0),   // Gold
+    tft.color565(173, 216, 230), // Light blue
+    tft.color565(250, 128, 114), // Salmon
+    tft.color565(255, 160, 122), // Light salmon
+    tft.color565(32, 178, 170),  // Light sea green
+    tft.color565(240, 230, 140), // Khaki
+    tft.color565(152, 251, 152), // Pale green
+    tft.color565(144, 238, 144), // Light green
+    tft.color565(0, 255, 127),   // Spring Green
+    tft.color565(135, 206, 250), // Light sky blue
+    tft.color565(135, 206, 235), // Sky blue
+    tft.color565(173, 216, 230), // Light blue
+    tft.color565(240, 128, 128), // Light coral
+    tft.color565(255, 218, 185), // Peach puff
+    tft.color565(189, 183, 107), // Dark khaki
+    tft.color565(238, 232, 170), // Pale goldenrod
+    tft.color565(250, 250, 210), // Light goldenrod yellow
+    tft.color565(245, 245, 220), // Beige
+    tft.color565(255, 245, 238), // Seashell
+    tft.color565(255, 222, 173), // Navajo white
+    tft.color565(253, 245, 230)  // Old lace
 };
 
 // Colors
@@ -109,7 +133,7 @@ void core1Task() {
   // Rendering loop (Core 1) for game graphics (excluding scoreboard)
   while (true) {
     updateDisplay();
-    delay(5);  // Control game rendering speed
+    delay(3);  // Control game rendering speed
   }
 }
 
@@ -120,7 +144,7 @@ void core2Task() {
     checkCollisions();
     updatePaddleAI();
     checkLevelProgression();
-    delay(5);  // Control game logic speed
+    delay(3);  // Control game logic speed
   }
 }
 
@@ -131,7 +155,7 @@ void coreM4Task() {
       drawScoreboard();
       updateScoreboardFlag = false;  // Reset flag after update
     }
-    delay(20);  // Control scoreboard update rate
+    delay(10);  // Control scoreboard update rate
   }
 }
 
@@ -278,7 +302,7 @@ void checkCollisions() {
           ballDY = -ballDY;
           score += pointsPerBrickHit;
           if (brickStrength[row][col] <= 0) {
-            tft.fillRect(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, backgroundColor);
+            tft.fillRect(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, backgroundColor);  // Clear the brick
             decreaseBallSpeed();
           }
           updateScoreboardFlag = true;
