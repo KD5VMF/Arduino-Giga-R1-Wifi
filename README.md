@@ -35,12 +35,6 @@ Smart Level Design: Progression through increasingly difficult levels, with inte
 IoT Sensor Monitoring
 A project utilizing the WiFi capabilities of the Giga R1 to create a real-time sensor monitoring system. This project showcases:
 
-IoT Connectivity: Stream sensor data to a cloud service for real-time monitoring and logging.
-Interactive Display: The Giga Display is used to visualize sensor readings, providing a clean, intuitive interface.
-Alert System: The project includes features to send alerts via WiFi when sensor values exceed predefined thresholds.
-Real-Time Data Visualization
-This project focuses on visualizing real-time data on the Giga Display, demonstrating:
-
 Graphical Displays: Real-time data is plotted on the Giga Display, with smooth updates and visually appealing graphs.
 Multi-Core Optimization: Data processing is offloaded to one core, while another handles the rendering of visual elements.
 User Interaction: Interactive features allow users to manipulate data streams and see real-time changes on the display.
@@ -56,12 +50,19 @@ Scheduler Library: Use the Scheduler library for multi-core task handling and ef
 Installation
 To install and run any of the projects:
 
+TO COME...
+IoT Connectivity: Stream sensor data to a cloud service for real-time monitoring and logging.
+Interactive Display: The Giga Display is used to visualize sensor readings, providing a clean, intuitive interface.
+Alert System: The project includes features to send alerts via WiFi when sensor values exceed predefined thresholds.
+Real-Time Data Visualization
+This project focuses on visualizing real-time data on the Giga Display, demonstrating:
 Clone the repository or download the project files to your local machine.
 Open the .ino file in the Arduino IDE.
 Connect your Arduino Giga R1 WiFi board and select the appropriate port and board type in the Arduino IDE.
 Upload the code to the board and run the project!
 Contributing
 If you have ideas for new features, optimizations, or bug fixes, feel free to contribute! You can fork any of my repositories, make your changes, and submit a pull request. I welcome any input that helps make these projects even better.
+
 
 License
 All the projects in this profile are licensed under the MIT License. For more details, see the LICENSE file in each repository.
