@@ -20,7 +20,8 @@ A classic Breakout-style game built specifically for the Giga R1 WiFi and Giga D
 Utilizes both M7 cores for game rendering and logic, while the M4 core handles scoreboard updates to ensure smooth gameplay with minimal flickering.
 Dynamic Difficulty: Levels become progressively harder, with intelligent paddle AI and ball speed adjustments that keep the game challenging.
 Advanced Brick Mechanics: Bricks have different hit zones, adding a strategic element to gameplay. Players must carefully consider how to break them efficiently.
-Tic-Tac-Toe AI
+
+$ Tic-Tac-Toe AI
 A Tic-Tac-Toe game with a smart AI opponent, optimized for the Giga Display. This project demonstrates:
 
 # AI Learning: 
