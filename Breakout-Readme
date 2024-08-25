@@ -3,7 +3,7 @@ This repository contains a Breakout-style game implemented for the Arduino Giga 
 high-performance gaming experience with dynamic difficulty progression.
 
 Overview
-In this Breakout-style game, players use a paddle to bounce a ball and break bricks. The objective is to clear all the bricks on the screen to advance to the next level. 
+In this Breakout-style game, AI - players use a paddle to bounce a ball and break bricks. The objective is to clear all the bricks on the screen to advance to the next level. 
 The game increases in difficulty as the player progresses through levels, with bricks becoming harder to destroy, the ball speeding up, and the paddle AI adapting accordingly.
 
 The game runs across three cores of the Arduino Giga board:
