@@ -14,9 +14,6 @@ WiFi and Bluetooth Capabilities: Robust connectivity features for IoT projects, 
 Giga Display: A large, vibrant display that allows for dynamic graphics rendering, making it perfect for games, UI interfaces, data visualization, and more.
 What You'll Find Here
 
-# Breakout Game
-A classic Breakout-style game designed specifically for the Giga R1 WiFi and Giga Display. This project highlights:
-
 # Multi-Core Processing:
 Utilizes both M7 cores for game rendering and logic, while the M4 core handles scoreboard updates to ensure smooth gameplay with minimal flickering.
 Dynamic Difficulty: Levels get progressively harder, featuring intelligent paddle AI and ball speed adjustments to keep the game challenging and engaging.
