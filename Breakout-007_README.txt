@@ -46,6 +46,6 @@ Contributing
 Feel free to contribute to this project by submitting pull requests or opening issues.
 
 Acknowledgements
-[Your Name]: Project creator and code implementation.
+KD5VMF: Project creator and code implementation.
 ChatGPT (OpenAI): Assisted in developing advanced features, including persistent data tracking, multi-core utilization,
 and graphical optimizations.
