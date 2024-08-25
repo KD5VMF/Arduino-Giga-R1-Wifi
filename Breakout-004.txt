@@ -1,7 +1,9 @@
 Breakout-004
-A Breakout-style game designed specifically for the Arduino Giga R1 WiFi with Giga Display. This project showcases multi-core processing with smooth graphics, a dynamic AI-controlled paddle, and a gradual increase in game difficulty across 100 levels. It is an impressive demonstration of the power of the Arduino Giga R1 WiFi's dual M7 cores and the M4 core for parallel execution.
+A Breakout-style game designed specifically for the Arduino Giga R1 WiFi with Giga Display. This project showcases multi-core processing with smooth graphics,
+a dynamic AI-controlled paddle, and a gradual increase in game difficulty across 100 levels. It is an impressive demonstration of the power of the Arduino Giga R1 WiFi's dual M7 cores and the M4 core for parallel execution.
 
-Developed collaboratively by KD5VMF and ChatGPT-4o, this project is a polished version of the classic game with enhanced features and optimized performance. Special thanks to ChatGPT-4o for assistance in coding, testing, and optimizing this game.
+Developed collaboratively by KD5VMF and ChatGPT-4o, this project is a polished version of the classic game with enhanced features and optimized performance.
+Special thanks to ChatGPT-4o for assistance in coding, testing, and optimizing this game.
 
 Features
 Multi-Core Processing: Utilizes both M7 cores for game rendering and logic, while the M4 core is used for scoreboard updates.
