@@ -13,7 +13,7 @@ GigaDisplay_GFX tft;
 int pointsPerRowCleared = 1;        // Points earned per cleared row
 int pointsPerBrickHit = 1;          // Base points per brick hit
 int multiBrickBonus = 2;            // Bonus for multiple consecutive brick hits
-int missPenalty = 50;               // Points deducted on a miss
+int missPenalty = 75;               // Points deducted on a miss
 int pointsToLose = 0;               // Game over threshold
 
 // Gravity and physics variables
