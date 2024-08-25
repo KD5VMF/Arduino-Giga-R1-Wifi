@@ -1,8 +1,11 @@
 Self-Playing Game for Arduino GIGA R1 WiFi with GIGA Display Shield
 Overview
-This project is a self-playing game built for the Arduino GIGA R1 WiFi and the GIGA Display Shield. The game mimics classic brick breaker-style gameplay, featuring paddle AI and advanced game physics. It includes multiple difficulty levels, dynamic paddle movement, randomized brick colors, and persistent tracking of the highest level reached.
+This project is a self-playing game built for the Arduino GIGA R1 WiFi and the GIGA Display Shield. The game mimics classic brick breaker-style gameplay,
+featuring paddle AI and advanced game physics. It includes multiple difficulty levels, dynamic paddle movement, randomized brick colors,
+and persistent tracking of the highest level reached.
 
-The game leverages the dual-core processing capability of the Arduino GIGA R1 WiFi for concurrent rendering and game logic, with an additional core dedicated to updating the scoreboard. The project aims to demonstrate complex game development on embedded systems with minimal latency and smooth graphics.
+The game leverages the dual-core processing capability of the Arduino GIGA R1 WiFi for concurrent rendering and game logic,
+with an additional core dedicated to updating the scoreboard. The project aims to demonstrate complex game development on embedded systems with minimal latency and smooth graphics.
 
 Features
 Self-Playing AI: The paddle automatically follows the ball, with AI logic that simulates human-like behavior and intelligent shot targeting.
@@ -18,25 +21,31 @@ Code Structure
 The program leverages Scheduler.h to manage the multi-core capabilities of the Arduino GIGA R1 WiFi. Here’s a breakdown of the main components:
 
 Core 1 (M7) – Rendering Task
-Handles the visual updates for the game, including drawing the ball, paddle, bricks, and all other game objects. This core ensures smooth rendering by minimizing screen refreshes, only redrawing the elements that need updates.
+Handles the visual updates for the game, including drawing the ball, paddle, bricks, and all other game objects.
+This core ensures smooth rendering by minimizing screen refreshes, only redrawing the elements that need updates.
 
 Core 2 (M7) – Game Logic Task
-This core manages the game physics, including ball movement, collision detection, paddle AI, and scoring. It ensures that the game logic is computed in real-time, adjusting ball speed, applying gravity, and managing brick states.
+This core manages the game physics, including ball movement, collision detection, paddle AI, and scoring.
+It ensures that the game logic is computed in real-time, adjusting ball speed, applying gravity, and managing brick states.
 
 Core M4 – Scoreboard Update Task
-Dedicated solely to updating the scoreboard values such as the current score, number of misses, current level, and the highest level reached. The scoreboard is updated without interrupting the main gameplay, providing real-time feedback to the player.
+Dedicated solely to updating the scoreboard values such as the current score, number of misses, current level, and the highest level reached.
+The scoreboard is updated without interrupting the main gameplay, providing real-time feedback to the player.
 
 Persistent Data
-A unique feature of the game is the persistent high score tracking. The highest level reached (maxLevelReached) remains stored in memory across game sessions. This value will only reset when the device is powered off, giving the player a sense of long-term progression.
+A unique feature of the game is the persistent high score tracking. The highest level reached (maxLevelReached) remains stored in memory across game sessions.
+This value will only reset when the device is powered off, giving the player a sense of long-term progression.
 
 Usage
 Connect the Arduino GIGA R1 WiFi to your GIGA Display Shield.
 Upload the code to the Arduino via the Arduino IDE.
 Watch as the AI plays the game automatically, progressing through increasingly difficult levels.
-The game will display the current score, misses, level, and the highest level reached on the scoreboard. The highest level reached persists even after the game resets, as long as the device remains powered on.
+The game will display the current score, misses, level, and the highest level reached on the scoreboard.
+The highest level reached persists even after the game resets, as long as the device remains powered on.
 Contributing
 Feel free to contribute to this project by submitting pull requests or opening issues.
 
 Acknowledgements
 [Your Name]: Project creator and code implementation.
-ChatGPT (OpenAI): Assisted in developing advanced features, including persistent data tracking, multi-core utilization, and graphical optimizations.
+ChatGPT (OpenAI): Assisted in developing advanced features, including persistent data tracking, multi-core utilization,
+and graphical optimizations.
