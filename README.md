@@ -1,5 +1,5 @@
-# Arduino-Giga-R1-Wifi CHAT-GPT 4o & KD5VMF's
-# Arduino Giga R1 WiFi Projects. bELOW WRITTEN BY CHATGPT AT THE REQUEST OF KD5VMF AS WELL AS THE SAMPLE PROJECTS.
+# CHAT-GPT 4o & KD5VMF's
+# Arduino Giga R1 WiFi Projects. BELOW WRITTEN BY CHATGPT AT THE REQUEST OF KD5VMF AS WELL AS THE SAMPLE PROJECTS FOUND IN THIS REPOSITORY.
 
 
 Welcome to my GitHub profile! Here, you'll find a collection of projects that leverage the power of the Arduino Giga R1 WiFi board and the Giga Display to build creative and dynamic applications. My projects range from classic games to advanced systems, each demonstrating the capabilities of this versatile microcontroller and display combination.
