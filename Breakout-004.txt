@@ -1,0 +1,65 @@
+Breakout-004
+A Breakout-style game designed specifically for the Arduino Giga R1 WiFi with Giga Display. This project showcases multi-core processing with smooth graphics, a dynamic AI-controlled paddle, and a gradual increase in game difficulty across 100 levels. It is an impressive demonstration of the power of the Arduino Giga R1 WiFi's dual M7 cores and the M4 core for parallel execution.
+
+Developed collaboratively by KD5VMF and ChatGPT-4o, this project is a polished version of the classic game with enhanced features and optimized performance. Special thanks to ChatGPT-4o for assistance in coding, testing, and optimizing this game.
+
+Features
+Multi-Core Processing: Utilizes both M7 cores for game rendering and logic, while the M4 core is used for scoreboard updates.
+Dynamic Difficulty: The ball's speed increases gradually as levels progress, with a dynamic AI paddle that adapts to the ball's movement.
+Neon Graphics: The game features vibrant neon colors for bricks, making gameplay visually exciting.
+Loop Detection: A smart algorithm detects when the ball gets stuck in repetitive loops and applies a random nudge to prevent the loop from continuing.
+Smooth Gameplay: Optimized for smooth rendering with minimal flickering.
+
+Customizable Variables
+The game allows you to tweak key variables to match your preferred difficulty level and gameplay experience:
+
+
+int ballInitialSpeedX = 5;      // Initial horizontal speed of the ball
+int ballInitialSpeedY = -5;     // Initial vertical speed of the ball
+int ballSize = 10;              // Ball size (diameter)
+int initialPlayerAccuracy = 3;   // Paddle accuracy for tracking the ball
+int initialPlayerIntelligence = 2; // Paddle AI intelligence level
+int initialPaddleSpeed = 14;    // Paddle speed
+int paddleWidth = 100;          // Paddle width
+int brickHitRequirement = 1;    // Number of hits required to destroy a brick
+int pointsPerBrickHit = 2;      // Points gained per brick hit
+int pointsLostPerMiss = 1;      // Points lost when the player misses the ball
+
+
+Hardware Requirements
+Arduino Giga R1 WiFi: This game leverages the multi-core capabilities of the Giga R1 WiFi board.
+Giga Display: A large, vibrant display for the dynamic graphics rendering.
+
+Software Requirements
+Arduino IDE: Install the latest version of the Arduino IDE with support for the Giga R1 WiFi.
+GigaDisplay Library: Install the GigaDisplay library for handling the display.
+Scheduler Library: Utilize the Scheduler library for multi-core task management.
+
+Installation
+Clone or download this repository to your local machine.
+Open the Breakout-004.ino file in the Arduino IDE.
+
+Make sure your Arduino Giga R1 WiFi board is connected and selected in the Arduino IDE.
+
+Install the required libraries via the Arduino Library Manager:
+GigaDisplay
+Scheduler
+
+Upload the code to your Giga R1 WiFi board and enjoy the game!
+
+Game Controls
+The game is fully autonomous with AI-controlled paddles. The ball's speed and direction are affected by the player's performance.
+The paddle tracks the ball using AI, but you can adjust its accuracy and intelligence via the customizable variables.
+
+Game Mechanics
+Ball and Paddle Dynamics: The ball starts with an initial speed, and its speed increases after each paddle hit. The game detects and corrects repetitive ball movement patterns by applying a random nudge.
+Brick Colors: Each level starts with randomized neon-colored bricks that take multiple hits to break as the levels progress.
+Level Progression: After all bricks are cleared, the player advances to the next level. The maximum level is set to 100, and the game resets after completing all levels.
+Scorekeeping: The game tracks the player's score and the number of misses. Points are awarded for breaking bricks and deducted for missing the ball.
+
+Credits
+KD5VMF: Project lead, game designer, and tester.
+ChatGPT-4o: Collaborator for coding, debugging, and optimizing the game. ChatGPT-4o helped implement multi-core processing, smooth graphics, and adaptive AI, making this project a success.
+
+License
+This project is licensed under the MIT License. See the LICENSE file for more information.
