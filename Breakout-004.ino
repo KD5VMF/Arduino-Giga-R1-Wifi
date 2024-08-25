@@ -51,11 +51,11 @@ int playerIntelligence = initialPlayerIntelligence;
 int paddleSpeed = initialPaddleSpeed;
 
 // Brick properties
-#define BRICK_ROWS 5
+#define BRICK_ROWS 4
 #define BRICK_COLUMNS 5
-#define BRICK_WIDTH 100
-#define BRICK_HEIGHT 20
-#define BRICK_SPACING 10
+#define BRICK_WIDTH 115
+#define BRICK_HEIGHT 50
+#define BRICK_SPACING 7
 int brickStrength[BRICK_ROWS][BRICK_COLUMNS];
 uint16_t brickColors[BRICK_ROWS][BRICK_COLUMNS];
 int maxBrickStrength = brickHitRequirement;
@@ -80,8 +80,8 @@ uint16_t neonColors[] = {
 };
 
 // Colors
-uint16_t paddleColor = tft.color565(255, 255, 0);  // Yellow paddle
-uint16_t ballColor = tft.color565(0, 255, 255);    // Cyan ball
+uint16_t paddleColor = tft.color565(255, 255, 255);  // White paddle
+uint16_t ballColor = tft.color565(255, 255, 0);    // Bright neon yellow
 uint16_t backgroundColor = tft.color565(0, 0, 0);  // Black background
 
 void setup() {
