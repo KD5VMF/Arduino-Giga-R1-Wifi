@@ -31,7 +31,7 @@ volatile bool graphicsReady = false;
 // Customizable Variables
 int ballInitialSpeedX = 6;
 int ballInitialSpeedY = -6;
-int ballSize = 10;
+int ballSize = 15;
 int initialPlayerAccuracy = 3;
 int initialPlayerIntelligence = 2;
 int initialPaddleSpeed = 14;
