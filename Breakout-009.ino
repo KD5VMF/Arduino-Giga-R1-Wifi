@@ -6,7 +6,7 @@ GigaDisplay_GFX tft;
 // Constants for the screen and game components
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 480
-#define SCOREBOARD_WIDTH 150
+#define SCOREBOARD_WIDTH 140
 #define MAX_LEVEL 100
 
 // Scoring and game variables
@@ -29,7 +29,7 @@ volatile bool updateScoreboardFlag = false;
 volatile bool graphicsReady = false;
 
 // Customizable Variables
-int ballInitialSpeedX = 5;
+int ballInitialSpeedX = 6;
 int ballInitialSpeedY = -6;
 int ballSize = 10;
 int initialPlayerAccuracy = 3;
@@ -66,25 +66,63 @@ int paddleSpeed = initialPaddleSpeed;
 #define BRICK_COLUMNS 5
 #define BRICK_WIDTH 115
 #define BRICK_HEIGHT 50
-#define BRICK_SPACING 7
+#define BRICK_SPACING 6
 int brickStrength[BRICK_ROWS][BRICK_COLUMNS];
 uint16_t brickColors[BRICK_ROWS][BRICK_COLUMNS];
 int maxBrickStrength = brickHitRequirement;
 
 bool blockedGrid[BRICK_ROWS][BRICK_COLUMNS];
 
-// Neon colors for bricks
-uint16_t neonColors[] = {
-    tft.color565(57, 255, 20),   // Neon green
-    tft.color565(255, 0, 255),   // Neon magenta
-    tft.color565(0, 255, 255),   // Neon cyan
-    tft.color565(255, 255, 0),   // Neon yellow
-    tft.color565(255, 105, 180), // Neon pink
-    tft.color565(255, 69, 0),    // Neon orange
-    tft.color565(138, 43, 226),  // Neon purple
-    tft.color565(124, 252, 0),   // Neon lime
-    tft.color565(0, 191, 255),   // Neon sky blue
-    tft.color565(255, 20, 147),  // Neon deep pink
+// Expanded Neon Colors for Bricks - 50 Colors
+uint16_t neonColors[50] = {
+    tft.color565(57, 255, 20),    // Neon green
+    tft.color565(255, 0, 255),    // Neon magenta
+    tft.color565(0, 255, 255),    // Neon cyan
+    tft.color565(255, 255, 0),    // Neon yellow
+    tft.color565(255, 105, 180),  // Neon pink
+    tft.color565(255, 69, 0),     // Neon orange
+    tft.color565(138, 43, 226),   // Neon purple
+    tft.color565(124, 252, 0),    // Neon lime
+    tft.color565(0, 191, 255),    // Neon sky blue
+    tft.color565(255, 20, 147),   // Neon deep pink
+    tft.color565(127, 255, 212),  // Aquamarine
+    tft.color565(0, 255, 127),    // Spring green
+    tft.color565(255, 215, 0),    // Gold
+    tft.color565(173, 216, 230),  // Light blue
+    tft.color565(250, 128, 114),  // Salmon
+    tft.color565(255, 160, 122),  // Light salmon
+    tft.color565(32, 178, 170),   // Light sea green
+    tft.color565(240, 230, 140),  // Khaki
+    tft.color565(152, 251, 152),  // Pale green
+    tft.color565(144, 238, 144),  // Light green
+    tft.color565(135, 206, 250),  // Light sky blue
+    tft.color565(135, 206, 235),  // Sky blue
+    tft.color565(240, 128, 128),  // Light coral
+    tft.color565(255, 218, 185),  // Peach puff
+    tft.color565(189, 183, 107),  // Dark khaki
+    tft.color565(238, 232, 170),  // Pale goldenrod
+    tft.color565(250, 250, 210),  // Light goldenrod yellow
+    tft.color565(245, 245, 220),  // Beige
+    tft.color565(255, 245, 238),  // Seashell
+    tft.color565(255, 222, 173),  // Navajo white
+    tft.color565(253, 245, 230),  // Old lace
+    tft.color565(102, 205, 170),  // Medium aquamarine
+    tft.color565(127, 255, 0),    // Chartreuse
+    tft.color565(173, 255, 47),   // Green yellow
+    tft.color565(255, 250, 205),  // Lemon chiffon
+    tft.color565(100, 149, 237),  // Cornflower blue
+    //tft.color565(72, 61, 139),    // Dark slate blue
+    tft.color565(219, 112, 147),  // Pale violet red
+    tft.color565(221, 160, 221),  // Plum
+    tft.color565(210, 180, 140),  // Tan
+    tft.color565(255, 99, 71),    // Tomato
+    tft.color565(233, 150, 122),  // Dark salmon
+    tft.color565(144, 238, 144),  // Light green
+    tft.color565(60, 179, 113),   // Medium sea green
+    tft.color565(34, 139, 34),    // Forest green
+    tft.color565(34, 255, 150),   // Neon green light
+    tft.color565(255, 236, 139),  // Light yellow
+    tft.color565(255, 140, 0)     // Dark orange
 };
 
 // Multi-hit combo tracking
@@ -94,20 +132,15 @@ int multiHitCount = 0;
 uint16_t paddleColor = tft.color565(255, 255, 255);
 uint16_t ballColor = tft.color565(255, 255, 0);
 uint16_t backgroundColor = tft.color565(0, 0, 0);
-uint16_t scoreboardBackgroundColor = tft.color565(0, 0, 128);
-uint16_t scoreboardTextColor = tft.color565(255, 255, 255);
-uint16_t scoreColor = tft.color565(255, 215, 0);
-uint16_t missesColor = tft.color565(255, 0, 0);
-uint16_t levelColor = tft.color565(0, 255, 0);
+uint16_t brightGreen = tft.color565(57, 255, 20);  // Bright green color for instructions
 
 void setup() {
   tft.begin();
   tft.setRotation(1);
   tft.fillScreen(backgroundColor);
 
-  if (maxLevelReached == 1) {
-    maxLevelReached = 1;
-  }
+  // Display the welcome screen with countdown
+  displayWelcomeScreen();
 
   drawScoreboardLayout();
   initializeBricks();
@@ -116,14 +149,69 @@ void setup() {
   drawPaddle();
   drawBall();
 
-  // Delay to allow players to see the setup before the game starts
-  delay(2000);
-
   graphicsReady = true;
 
   Scheduler.startLoop(core1Task);
   Scheduler.startLoop(core2Task);
   Scheduler.startLoop(coreM4Task);
+}
+
+void displayWelcomeScreen() {
+  tft.fillScreen(backgroundColor);
+  tft.setTextColor(brightGreen);
+  tft.setTextSize(2);
+
+  tft.setCursor(10, 20);
+  tft.print("Welcome to Breakout-009!");
+
+  tft.setCursor(10, 60);
+  tft.print("Scoreboard and Scoring:");
+  tft.setCursor(10, 100);
+  tft.print("- Brick hit: 2 points");
+  tft.setCursor(10, 130);
+  tft.print("- Row cleared: 10 points");
+  tft.setCursor(10, 160);
+  tft.print("- Multi-brick bonus: 4 points per hit");
+
+  tft.setCursor(10, 200);
+  tft.print("Level Progression:");
+  tft.setCursor(10, 230);
+  tft.print("- Each level gets harder");
+  tft.setCursor(10, 260);
+  tft.print("- Ball speed increases");
+  tft.setCursor(10, 290);
+  tft.print("- Brick strength increases");
+
+  tft.setCursor(10, 350);
+  tft.print("Get ready!");
+
+  // Display countdown timer using a non-blocking approach
+  unsigned long previousMillis = millis();  // Store the current time
+  int countdown = 35;
+
+  while (countdown >= 0) {
+    unsigned long currentMillis = millis();  // Get the current time
+
+    if (currentMillis - previousMillis >= 1000) {
+      // 1 second has passed
+      previousMillis = currentMillis;
+
+      // Clear the previous countdown text
+      tft.fillRect(10, 400, 300, 40, backgroundColor);
+
+      // Update and display the countdown
+      tft.setCursor(10, 400);
+      tft.setTextSize(3);
+      tft.print("Starts in: ");
+      tft.print(countdown);
+
+      // Decrement the countdown
+      countdown--;
+    }
+  }
+
+  // After countdown, proceed to game setup
+  tft.fillScreen(backgroundColor);
 }
 
 void loop() {
@@ -161,8 +249,8 @@ void coreM4Task() {
 }
 
 void drawScoreboardLayout() {
-  tft.fillRoundRect(0, 0, SCOREBOARD_WIDTH, SCREEN_HEIGHT, 15, scoreboardBackgroundColor);
-  tft.setTextColor(scoreboardTextColor);
+  tft.fillRoundRect(0, 0, SCOREBOARD_WIDTH, SCREEN_HEIGHT, 15, tft.color565(0, 0, 128));
+  tft.setTextColor(tft.color565(255, 255, 255));
   tft.setTextSize(2);
 
   tft.setCursor(10, 20);
@@ -176,25 +264,25 @@ void drawScoreboardLayout() {
 }
 
 void updateScoreboard() {
-  tft.setTextColor(scoreColor);
+  tft.setTextColor(tft.color565(255, 215, 0));
   tft.setTextSize(3);
-  tft.fillRect(10, 60, SCOREBOARD_WIDTH - 20, 50, scoreboardBackgroundColor);
+  tft.fillRect(10, 60, SCOREBOARD_WIDTH - 20, 50, tft.color565(0, 0, 128));
   tft.setCursor(10, 60);
   tft.print(score);
 
-  tft.setTextColor(missesColor);
-  tft.fillRect(10, 160, SCOREBOARD_WIDTH - 20, 50, scoreboardBackgroundColor);
+  tft.setTextColor(tft.color565(255, 0, 0));
+  tft.fillRect(10, 160, SCOREBOARD_WIDTH - 20, 50, tft.color565(0, 0, 128));
   tft.setCursor(10, 160);
   tft.print(misses);
 
-  tft.setTextColor(levelColor);
-  tft.fillRect(10, 260, SCOREBOARD_WIDTH - 20, 50, scoreboardBackgroundColor);
+  tft.setTextColor(tft.color565(0, 255, 0));
+  tft.fillRect(10, 260, SCOREBOARD_WIDTH - 20, 50, tft.color565(0, 0, 128));
   tft.setCursor(10, 260);
   tft.print(level);
 
   tft.setTextColor(tft.color565(255, 215, 0));
   tft.setTextSize(3);
-  tft.fillRect(10, 360, SCOREBOARD_WIDTH - 20, 50, scoreboardBackgroundColor);
+  tft.fillRect(10, 360, SCOREBOARD_WIDTH - 20, 50, tft.color565(0, 0, 128));
   tft.setCursor(10, 360);
   tft.print(maxLevelReached);
 }
@@ -202,8 +290,15 @@ void updateScoreboard() {
 void initializeBricks() {
   for (int row = 0; row < BRICK_ROWS; row++) {
     for (int col = 0; col < BRICK_COLUMNS; col++) {
+      uint16_t color = neonColors[random(0, 50)];
+
+      while ((col > 0 && color == brickColors[row][col - 1]) || 
+             (row > 0 && color == brickColors[row - 1][col])) {
+        color = neonColors[random(0, 50)];
+      }
+
+      brickColors[row][col] = color;
       brickStrength[row][col] = maxBrickStrength;
-      brickColors[row][col] = neonColors[random(0, sizeof(neonColors) / sizeof(neonColors[0]))];
       blockedGrid[row][col] = true;
     }
   }
@@ -222,10 +317,7 @@ void drawBricks() {
 }
 
 void resetPaddleAndBall() {
-  // Clear the old paddle to prevent ghosting issues
   clearPaddle();
-
-  // Center the paddle and reset the ball above the paddle
   paddleX = SCREEN_WIDTH / 2 - paddleWidth / 2;
   ballX = SCREEN_WIDTH / 2;
   ballY = PADDLE_Y_POSITION - ballSize - 2;
@@ -235,7 +327,7 @@ void resetPaddleAndBall() {
 }
 
 void drawPaddle() {
-  clearPaddle();  // Clear previous paddle before drawing the new one
+  clearPaddle();
   tft.fillRoundRect(paddleX, PADDLE_Y_POSITION, paddleWidth, PADDLE_HEIGHT, 5, paddleColor);
 }
 
@@ -253,33 +345,29 @@ void clearBall() {
 
 void moveBall() {
   clearBall();
-
   float nextBallX = ballX + ballDX * ballSpeedMultiplier;
   float nextBallY = ballY + ballDY * ballSpeedMultiplier;
 
-  // Handle wall collisions
   if (nextBallX <= SCOREBOARD_WIDTH + ballSize / 2 || nextBallX >= SCREEN_WIDTH - ballSize / 2) {
-    ballDX = -ballDX;  // Reflect horizontally
+    ballDX = -ballDX;
   }
 
   if (nextBallY <= ballSize / 2) {
-    ballDY = -ballDY;  // Reflect vertically
+    ballDY = -ballDY;
   }
 
-  // Ensure consistent upward motion (up power) if ball is stuck in horizontal bouncing
   if (abs(ballDY) < 1) {
-    ballDY = (ballDY < 0) ? -2 : 2;  // Add upward force if ball's vertical speed is too low
+    ballDY = (ballDY < 0) ? -2 : 2;
   }
 
   ballDY += gravity;
   if (ballDY > gravityMaxSpeed) {
-    ballDY = gravityMaxSpeed;  // Cap gravity speed
+    ballDY = gravityMaxSpeed;
   }
 
   ballX += ballDX * ballSpeedMultiplier;
   ballY += ballDY * ballSpeedMultiplier;
 
-  // Ball out of bounds (missed paddle)
   if (ballY >= SCREEN_HEIGHT) {
     misses++;
     score -= missPenalty;
@@ -290,57 +378,50 @@ void moveBall() {
       resetPaddleAndBall();
       drawPaddle();
       drawBall();
-      delay(2000);  // Delay before starting again
+      delay(2000);
     }
     updateScoreboardFlag = true;
-    multiHitCount = 0;  // Reset multi-hit combo count
+    multiHitCount = 0;
   }
 
   drawBall();
 }
 
 void checkCollisions() {
-  // Ball and paddle collision
   if (ballY + ballSize / 2 >= PADDLE_Y_POSITION && ballX >= paddleX && ballX <= paddleX + paddleWidth) {
     ballDY = -ballDY;
     increaseBallSpeed();
-    multiHitCount = 0;  // Reset combo count
+    multiHitCount = 0;
   }
 
-  // Ball and brick collision detection
   for (int row = 0; row < BRICK_ROWS; row++) {
     for (int col = 0; col < BRICK_COLUMNS; col++) {
       if (brickStrength[row][col] > 0) {
         int brickX = SCOREBOARD_WIDTH + col * (BRICK_WIDTH + BRICK_SPACING);
         int brickY = row * (BRICK_HEIGHT + BRICK_SPACING) + 50;
 
-        // Collision detection and prevent ball from passing through bricks
         if (ballX + ballSize / 2 > brickX && ballX - ballSize / 2 < brickX + BRICK_WIDTH &&
             ballY + ballSize / 2 > brickY && ballY - ballSize / 2 < brickY + BRICK_HEIGHT) {
 
-          // Handle collision based on ball direction and brick sides
           float ballCenterX = ballX;
           float ballCenterY = ballY;
           float brickCenterX = brickX + BRICK_WIDTH / 2;
           float brickCenterY = brickY + BRICK_HEIGHT / 2;
 
-          // Horizontal or vertical reflection based on closest edge
           if (abs(ballCenterX - brickCenterX) > abs(ballCenterY - brickCenterY)) {
-            ballDX = -ballDX;  // Reflect horizontally
+            ballDX = -ballDX;
           } else {
-            ballDY = -ballDY;  // Reflect vertically
+            ballDY = -ballDY;
           }
 
-          // Reduce brick strength and check for destruction
           brickStrength[row][col]--;
           if (brickStrength[row][col] <= 0) {
-            tft.fillRoundRect(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, 10, backgroundColor);  // Clear the brick
+            tft.fillRoundRect(brickX, brickY, BRICK_WIDTH, BRICK_HEIGHT, 10, backgroundColor);
             score += pointsPerBrickHit;
             multiHitCount++;
             score += multiHitCount * multiBrickBonus;
             updateScoreboardFlag = true;
 
-            // Check if the entire row is cleared
             bool rowCleared = true;
             for (int c = 0; c < BRICK_COLUMNS; c++) {
               if (brickStrength[row][c] > 0) {
@@ -353,7 +434,7 @@ void checkCollisions() {
               updateScoreboardFlag = true;
             }
           }
-          return;  // Only process one collision per frame
+          return;
         }
       }
     }
@@ -361,7 +442,7 @@ void checkCollisions() {
 }
 
 void updatePaddleAI() {
-  clearPaddle();  // Clear previous paddle position to avoid ghosting
+  clearPaddle();
   int targetX = ballX + ballDX * playerIntelligence;
 
   if (targetX < paddleX + paddleWidth / 2 - playerAccuracy && paddleX > SCOREBOARD_WIDTH) {
@@ -369,7 +450,7 @@ void updatePaddleAI() {
   } else if (targetX > paddleX + paddleWidth / 2 + playerAccuracy && paddleX < SCREEN_WIDTH - paddleWidth) {
     paddleX += paddleSpeed;
   }
-  drawPaddle();  // Redraw the paddle at the new position
+  drawPaddle();
 }
 
 void increaseBallSpeed() {
@@ -430,13 +511,12 @@ void nextLevel() {
     return;
   }
 
-  maxBrickStrength++;  // Increment brick strength on each level
+  maxBrickStrength++;
 
   if (level > maxLevelReached) {
     maxLevelReached = level;
   }
 
-  // Reset ball speed and gravity settings for the new level
   ballSpeedMultiplier = 1.0;
   ballDX = ballInitialSpeedX;
   ballDY = ballInitialSpeedY;
@@ -446,7 +526,7 @@ void nextLevel() {
   drawBricks();
   drawPaddle();
   drawBall();
-  delay(2000);  // Delay before starting the next level
+  delay(2000);
 
   updateScoreboardFlag = true;
 }
@@ -456,19 +536,18 @@ void resetGame() {
   misses = 0;
   maxBrickStrength = brickHitRequirement;
 
-  // Reset game-specific variables
   ballSpeedMultiplier = 1.0;
   ballDX = ballInitialSpeedX;
   ballDY = ballInitialSpeedY;
 
-  level = 1;  // Reset level to 1
+  level = 1;
   initializeBricks();
   resetPaddleAndBall();
   drawBricks();
   drawPaddle();
   drawBall();
 
-  delay(2000);  // Delay before starting the new game
+  delay(2000);
   updateScoreboardFlag = true;
 }
 
