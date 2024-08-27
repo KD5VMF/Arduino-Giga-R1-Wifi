@@ -52,7 +52,7 @@ int paddleX = SCREEN_WIDTH / 2 - paddleWidth / 2;
 
 // Ball properties
 float ballX = SCREEN_WIDTH / 2;
-float ballY = PADDLE_Y_POSITION - ballSize - 2;
+float ballY = PADDLE_Y_POSITION - ballSize - 3;
 float ballDX = ballInitialSpeedX * ballSpeedMultiplier;
 float ballDY = ballInitialSpeedY * ballSpeedMultiplier;
 
@@ -74,7 +74,7 @@ int maxBrickStrength = brickHitRequirement;
 bool blockedGrid[BRICK_ROWS][BRICK_COLUMNS];
 
 // Expanded Neon Colors for Bricks - 50 Colors
-uint16_t neonColors[50] = {
+uint16_t neonColors[30] = {
     tft.color565(57, 255, 20),    // Neon green
     tft.color565(255, 0, 255),    // Neon magenta
     tft.color565(0, 255, 255),    // Neon cyan
@@ -85,44 +85,26 @@ uint16_t neonColors[50] = {
     tft.color565(124, 252, 0),    // Neon lime
     tft.color565(0, 191, 255),    // Neon sky blue
     tft.color565(255, 20, 147),   // Neon deep pink
-    tft.color565(127, 255, 212),  // Aquamarine
-    tft.color565(0, 255, 127),    // Spring green
-    tft.color565(255, 215, 0),    // Gold
-    tft.color565(173, 216, 230),  // Light blue
-    tft.color565(250, 128, 114),  // Salmon
-    tft.color565(255, 160, 122),  // Light salmon
-    tft.color565(32, 178, 170),   // Light sea green
-    tft.color565(240, 230, 140),  // Khaki
-    tft.color565(152, 251, 152),  // Pale green
-    tft.color565(144, 238, 144),  // Light green
-    tft.color565(135, 206, 250),  // Light sky blue
-    tft.color565(135, 206, 235),  // Sky blue
-    tft.color565(240, 128, 128),  // Light coral
-    tft.color565(255, 218, 185),  // Peach puff
-    tft.color565(189, 183, 107),  // Dark khaki
-    tft.color565(238, 232, 170),  // Pale goldenrod
-    tft.color565(250, 250, 210),  // Light goldenrod yellow
-    tft.color565(245, 245, 220),  // Beige
-    tft.color565(255, 245, 238),  // Seashell
-    tft.color565(255, 222, 173),  // Navajo white
-    tft.color565(253, 245, 230),  // Old lace
-    tft.color565(102, 205, 170),  // Medium aquamarine
     tft.color565(127, 255, 0),    // Chartreuse
     tft.color565(173, 255, 47),   // Green yellow
-    tft.color565(255, 250, 205),  // Lemon chiffon
-    tft.color565(100, 149, 237),  // Cornflower blue
-    //tft.color565(72, 61, 139),    // Dark slate blue
-    tft.color565(219, 112, 147),  // Pale violet red
-    tft.color565(221, 160, 221),  // Plum
-    tft.color565(210, 180, 140),  // Tan
-    tft.color565(255, 99, 71),    // Tomato
-    tft.color565(233, 150, 122),  // Dark salmon
-    tft.color565(144, 238, 144),  // Light green
-    tft.color565(60, 179, 113),   // Medium sea green
-    tft.color565(34, 139, 34),    // Forest green
     tft.color565(34, 255, 150),   // Neon green light
-    tft.color565(255, 236, 139),  // Light yellow
-    tft.color565(255, 140, 0)     // Dark orange
+    tft.color565(255, 140, 0),    // Dark orange (bright neon)
+    tft.color565(255, 165, 0),    // Neon orange
+    tft.color565(199, 21, 133),   // Neon raspberry
+    tft.color565(255, 0, 127),    // Neon hot pink
+    tft.color565(255, 110, 180),  // Neon rose
+    tft.color565(0, 250, 154),    // Medium spring green (neon-like)
+    tft.color565(102, 255, 178),  // Aquamarine (neon-like)
+    tft.color565(240, 50, 230),   // Neon violet
+    tft.color565(0, 255, 127),    // Spring green
+    tft.color565(255, 99, 71),    // Neon tomato red
+    tft.color565(255, 66, 244),   // Neon fuchsia
+    tft.color565(255, 240, 31),   // Neon lemon
+    tft.color565(255, 182, 193),  // Neon light pink
+    tft.color565(173, 255, 47),   // Neon green yellow
+    tft.color565(0, 255, 102),    // Neon mint green
+    tft.color565(255, 20, 240),   // Neon purple-pink
+    tft.color565(0, 128, 255)     // Neon blue
 };
 
 // Multi-hit combo tracking
@@ -290,11 +272,13 @@ void updateScoreboard() {
 void initializeBricks() {
   for (int row = 0; row < BRICK_ROWS; row++) {
     for (int col = 0; col < BRICK_COLUMNS; col++) {
-      uint16_t color = neonColors[random(0, 50)];
-
+      // Ensure colors are chosen from the bright neonColors array (with 30 bright neon colors)
+      uint16_t color = neonColors[random(0, 30)]; // Choose from the 30 neon colors
+      
+      // Avoid placing two identical colors adjacent to each other
       while ((col > 0 && color == brickColors[row][col - 1]) || 
              (row > 0 && color == brickColors[row - 1][col])) {
-        color = neonColors[random(0, 50)];
+        color = neonColors[random(0, 30)]; // Re-select color if it's the same as adjacent bricks
       }
 
       brickColors[row][col] = color;
@@ -322,7 +306,13 @@ void resetPaddleAndBall() {
   ballX = SCREEN_WIDTH / 2;
   ballY = PADDLE_Y_POSITION - ballSize - 2;
 
-  ballDX = ballInitialSpeedX;
+  // Randomize ball direction on serve
+  if (random(0, 2) == 0) {
+    ballDX = ballInitialSpeedX;
+  } else {
+    ballDX = -ballInitialSpeedX;
+  }
+
   ballDY = ballInitialSpeedY;
 }
 
