@@ -10,14 +10,14 @@ GigaDisplay_GFX tft;
 #define MAX_LEVEL 100
 
 // Scoring and game variables
-int pointsPerRowCleared = 10;
-int pointsPerBrickHit = 2;
-int multiBrickBonus = 4;
+int pointsPerRowCleared = 123;
+int pointsPerBrickHit = 5;
+int multiBrickBonus = 10;
 int missPenalty = 125;
 int pointsToLose = 0;
 
 // Gravity and physics variables
-float gravity = 0.04;
+float gravity = 0.02;
 float gravityMaxSpeed = 4;
 
 // Shared variables for communication between M7 and M4 cores
@@ -32,9 +32,9 @@ volatile bool graphicsReady = false;
 int ballInitialSpeedX = 6;
 int ballInitialSpeedY = -6;
 int ballSize = 15;
-int initialPlayerAccuracy = 3;
-int initialPlayerIntelligence = 2;
-int initialPaddleSpeed = 14;
+int initialPlayerAccuracy = 8;
+int initialPlayerIntelligence = 8;
+int initialPaddleSpeed = 24;
 int paddleWidth = 100;
 int brickHitRequirement = 1;
 
