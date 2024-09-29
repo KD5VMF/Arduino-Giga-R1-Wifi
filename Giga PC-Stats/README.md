@@ -122,13 +122,6 @@ Contributions are welcome! If you'd like to help improve this project, please fo
 
 This project is open-source and available under the **MIT License**. Feel free to use, modify, and distribute it as you like.
 
-## 📞 Contact
-
-If you have any questions or run into any issues, feel free to open an issue on GitHub or contact the author at:
-
-- **Email**: your-email@example.com
-- **GitHub**: [@yourusername](https://github.com/yourusername)
-
----
+Written by ChatGPT 4o---
 
 Thank you for checking out this project! If you found it helpful, please consider starring ⭐ the repository to show your support.
