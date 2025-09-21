@@ -1,133 +1,293 @@
-# TinyBasic for Arduino GIGA R1 WiFi — GIGA-ready Notes
+# Stefan’s BASIC 2.0 — Arduino **GIGA R1 WiFi** Edition
 
-This document summarizes the adjustments we made to run **Stefan’s TinyBasic** on the **Arduino GIGA R1 WiFi**, with a focus on:
-- clean build on the GIGA toolchain (MBed Core),
-- friendly serial I/O for Tera Term / common terminals,
-- plug‑and‑play **USB Mass Storage** (save/load programs to a USB flash drive),
-- keeping upstream sources mostly intact (clearly marked files).
+A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Arduino GIGA R1 WiFi** with smooth serial terminal UX (e.g., **Tera Term**) and **USB mass‑storage** save/load support. You get the classic BASIC feel with modern I/O, timers, filesystem commands, and optional graphics.
 
-> ✅ You reported that **SAVE** and **LOAD** now work from a USB jump drive and the console is happy in Tera Term.  
-> ✅ `runtime.cpp` and the large “main” sketch were left **unmodified** per your request.
-
-
-## What we changed (and what we didn’t)
-
-### ✅ Adjusted / Added
-- **`hardware.h` (GIGA profile)**  
-  - Added/confirmed GIGA detection (`ARDUINO_ARCH_MBED_GIGA`) and enabled **GIGAUSBFS** for USB Mass Storage.
-  - Ensured serial defaults are Tera‑Term friendly (9600 8N1 by default; can be raised to 115200 in your sketch).
-  - Clarified buffer sizes, VT52, and background task flags consistent with GIGA memory/MBed core.
-
-- **`basic.h` (headers clean‑up & prototypes)**  
-  - Kept 100% API compatibility with upstream tokens and prototypes.
-  - Resolved minor C/C++ linkage pitfalls so that declarations match those in `runtime.h`.  
-    (No functional changes to the interpreter logic.)
-
-- **`language.h` (preprocessor guard)**  
-  - Fixed a preprocessor mismatch so you don’t get `#endif without #if` on GIGA builds.
-
-- **`IoTBasic.ino` (entrypoint)**  
-  - Minimal setup/loop that initializes I/O, prints a banner, attempts `autorun`, then hands control to the interpreter.  
-  - Non‑fatal autorun failure (e.g., no program) just drops to prompt.
-
-- **USB Mass Storage SAVE/LOAD behavior**  
-  - When a USB drive is attached at boot, TinyBasic exposes it as the primary filesystem.  
-  - `SAVE "FILENAME"` and `LOAD "FILENAME"` read/write to the USB stick.
-  - **Graceful failure:** If no USB drive is present, commands fail with a readable message (no crash) and the session continues.
-
-### ❌ Unmodified
-- **`runtime.cpp`** — left **as-is** (you requested “mark that as unmodified”).  
-- **“Main” code** for the sketch — also **unmodified** (per your last instruction).
-
-
-## Quick Start (GIGA R1 WiFi)
-
-1. **Board & Core**  
-   - Board: **Arduino GIGA R1 WiFi**  
-   - Core: **Arduino Mbed OS GIGA** (via Boards Manager)
-
-2. **Open the project** in Arduino IDE or CLI.
-
-3. **Serial Terminal**  
-   - Use **Tera Term** (or similar).  
-   - Default settings: **9600 baud, 8N1, CR+LF transmit**, local echo **off**.  
-   - You can change baud if desired in your sketch before `serialbegin()`.
-
-4. **USB Flash Drive (optional but recommended)**  
-   - Plug in a FAT‑formatted USB stick **before** powering/resetting the GIGA.  
-   - On startup, the USB mass storage is mounted.  
-   - If it’s missing or faulty, SAVE/LOAD will print a clear error and the interpreter keeps running.
-
-5. **Try it**  
-   ```basic
-   10 PRINT "HELLO GIGA"
-   20 GOTO 10
-   SAVE "HELLO.BAS"
-   NEW
-   LOAD "HELLO.BAS"
-   RUN
-   ```
-
-
-## Tera Term tips
-- Enable **“New-Line: CR+LF”** for transmit so Enter behaves nicely.  
-- If your output shows only LF line endings, you can toggle CR‑on‑LF printing in your sketch or keep Tera Term’s default rendering.  
-- For higher throughput, switch to **115200** and match the monitor settings.
-
-
-## Files touched in this port
-
-| File             | Status      | Notes |
-|------------------|-------------|------|
-| `hardware.h`     | **Modified** | GIGA profile, `GIGAUSBFS`, sensible buffers, VT52 and background flags sane for MBed. |
-| `basic.h`        | **Modified** | Strict prototype parity; no functional changes. |
-| `language.h`     | **Modified** | Fixed preprocessor guard so it compiles on GIGA. |
-| `IoTBasic.ino`   | **Added**    | Minimal entrypoint: banner → autorun (non‑fatal) → interpreter loop. |
-| `runtime.cpp`    | **Unmodified** | Left as‑is by request. |
-| “Main” sketch    | **Unmodified** | Left as‑is by request. |
-
-
-## SAVE/LOAD — failure messages
-If the drive is missing, not mounted, or read‑only, TinyBasic prints a clear message like:
-```
-[FS] USB not available — SAVE/LOAD disabled (continuing without storage)
-```
-Execution continues; you can still type, edit, and run programs in RAM.
-
-> If you later plug a USB drive, you’ll need to **reset** the board to mount it (GIGA’s USB host stack is initialized at boot).
-
-
-## Known limitations & notes
-- **Mount at boot**: the GIGA USB host is initialized at startup; hot‑plugging after boot isn’t supported by this sketch.
-- **FAT only**: ExFAT/NTFS aren’t supported by the current Arduino USB host libraries.
-- **Line editor**: TinyBasic uses a simple console editor; Tera Term works great with it.
-- **Memory reporting**: Some free‑RAM heuristics differ across architectures; the interpreter uses conservative defaults on GIGA.
-
-
-## Building with Arduino CLI (optional)
-```bash
-arduino-cli core install arduino:mbed_giga
-arduino-cli compile --fqbn arduino:mbed_giga:giga IoTBasic
-arduino-cli upload  --fqbn arduino:mbed_giga:giga -p <YOUR_PORT> IoTBasic
-```
-
-
-## Troubleshooting
-
-**Q: “SAVE” says the USB is not available.**  
-A: Ensure the flash drive is FAT‑formatted and plugged in **before** reset. Try a different stick. Power cycle the board.
-
-**Q: Tera Term shows weird line breaks.**  
-A: Set **Transmit** to CR+LF and/or adjust the sketch to send CR after LF on print. Disable local echo.
-
-**Q: Build errors about `#endif without #if` in `language.h`.**  
-A: You’re on an old snapshot. Use the fixed `language.h` from this GIGA branch (it contains the balanced `#if/#endif`).
-
-
-## Credits
-- TinyBasic by **Stefan Lenz** — GPLv3.  
-- Add‑ons and GIGA/USB tweaks by this port.
+> License: GPLv3 (same as upstream)
 
 ---
 
-If you want a GIGA‑specific example set (e.g., filesystem demo, sensor reads, and a splash banner) I can drop them into a `examples/giga/` folder.
+## Contents
+- [What’s in this fork?](#whats-in-this-fork)
+- [Hardware & software prerequisites](#hardware--software-prerequisites)
+- [Build & flash](#build--flash)
+- [Tera Term setup (Windows)](#tera-term-setup-windows)
+- [PuTTY / minicom settings (alternatives)](#putty--minicom-settings-alternatives)
+- [I/O channels in this build](#io-channels-in-this-build)
+- [Storage / filesystem](#storage--filesystem)
+- [BASIC language — full command set](#basic-language--full-command-set)
+- [Usage examples](#usage-examples)
+- [Troubleshooting](#troubleshooting)
+- [Known limitations](#known-limitations)
+- [Credits](#credits)
+- [License](#license)
+
+---
+
+## What’s in this fork?
+
+- ✅ **GIGA R1 WiFi** support (MBed core)
+- ✅ **USB Mass Storage** filesystem (`&16`) for `SAVE`, `LOAD`, `CATALOG`, etc.  
+  - **Safe‑fail**: if no USB drive is present or filesystem is unavailable, commands print a clear error and the interpreter keeps running.
+- ✅ Solid default serial UX for **Tera Term** / PuTTY / minicom
+- ✅ Full language set enabled (see below)
+
+---
+
+## Hardware & software prerequisites
+
+- **Board:** Arduino **GIGA R1 WiFi**
+- **IDE:** Arduino IDE 2.x (or CLI)
+- **Core:** Arduino Mbed OS GIGA (install via Boards Manager)
+- **Cable:** USB‑C data cable
+- **Optional storage:** USB thumb drive (FAT/FAT32 recommended)
+- **Terminal:** Tera Term (Windows) / PuTTY / minicom / screen
+
+---
+
+## Build & flash
+
+1. Open `Basic2/IoTBasic/IoTBasic.ino` in Arduino IDE.
+2. **Board:** `Arduino GIGA R1 WiFi`  
+   **Port:** your GIGA’s serial port
+3. **Upload** the sketch.
+
+On first boot you should see something like:
+```
+Stefan's Basic 2.0  Memory 65535  EEPROM 0
+Language set: full
+IO: 0 1 16
+>
+```
+
+If the banner looks “stair‑stepped” or duplicated, see **Tera Term setup** below.
+
+---
+
+## Tera Term setup (Windows)
+
+1) **Open** Tera Term → choose your GIGA **Serial** port.  
+2) **Setup → Serial port…**
+   - **Speed:** `9600`
+   - **Flow control:** `none`
+
+3) **Setup → Terminal…**
+   - **New‑line → Receive = `LF`**  ✅ *(this fixes the stair‑step banner)*
+   - **New‑line → Transmit = `CR+LF`**
+   - **Local echo = `OFF`**
+   - **Auto wrap = `ON`**
+   - **Terminal size = `80 x 24`** (or 25)
+   - **Backspace = `DEL (127)`**
+   - Select a **monospace font** (Consolas / Courier New)
+
+4) **Setup → Save setup…** (so the settings persist).
+
+> If your output still looks off: press `Enter` a few times to resync, then verify **Receive = LF** is set.
+
+---
+
+## PuTTY / minicom settings (alternatives)
+
+**PuTTY:**
+- **Serial line:** your COM port
+- **Speed:** `9600`
+- **Connection type:** `Serial`
+- **Terminal → Local echo:** `Force off`
+- **Terminal → Implicit CR in every LF:** **enabled** (equivalent to Receive=LF)
+- Save the session.
+
+**minicom (Linux/macOS):**
+- `minicom -D /dev/ttyACM0 -b 9600`
+- `Ctrl+A` → `Z` → `O` (setup)  
+  - Serial device `/dev/ttyACM0` (or similar)  
+  - Bps/Par/Bits: `9600 8N1`
+  - Turn **Local Echo** off
+  - Ensure **Add carriage return** ON if your input needs CR+LF
+
+---
+
+## I/O channels in this build
+
+- `&0` — Internal print buffer (readable as string via `@$`)
+- `&1` — USB Serial (your terminal)
+- `&16` — Filesystem (USB mass storage)
+
+---
+
+## Storage / filesystem
+
+On the GIGA R1:
+- `&16` is the **USB Mass Storage** device (your USB thumb drive).
+
+Typical workflow:
+```basic
+10 PRINT "Hello World!!"
+SAVE "HELLO"     ' saves to USB drive
+NEW
+LOAD "HELLO"
+RUN
+```
+
+If there’s **no USB drive** or it **can’t be mounted**:
+- Commands such as `LOAD`, `SAVE`, `CATALOG` **print a clear error** (e.g., `Filesystem not available` or `File not found`) and **continue running**.
+
+Handy DOS‑like helpers:
+- `CATALOG` – list files
+- `DELETE "NAME"` – delete a file
+- `FDISK` – format/initialize (where supported)
+- `OPEN` / `CLOSE` – low‑level file streams when needed
+
+> Tip: Use simple 8.3 file names where possible for maximum compatibility.
+
+---
+
+## BASIC language — full command set
+
+Commands are case‑insensitive. Availability of some features depends on the hardware & compile options, but this GIGA build ships the **full** set by default.
+
+### Core
+`PRINT`, `LET`, `INPUT`, `GOTO`, `GOSUB`, `RETURN`,  
+`IF ... THEN ... [ELSE ...]`,  
+`FOR ... TO ... [STEP ...]` / `NEXT`,  
+`STOP`, `LIST`, `NEW`, `RUN`, `REM`
+
+### Numeric & utility
+`ABS`, `RND`, `SIZE` (free memory), `SGN`, `INT`, `SQR`, `POW`, `MAP`
+
+### Variables, arrays, strings
+`DIM`, `CLR`, `HIMEM`, `PEEK`, `POKE`, `TAB`, `LEN`,  
+`STR$`, `VAL`, `INSTR`, substring `X$(i TO j)`
+
+### Program/data
+`DATA`, `READ`, `RESTORE`,  
+`DEF FN ... FEND` (user functions), `FN`, `ON ... GOTO/GOSUB`
+
+### Control flow (structured)
+`WHILE ... WEND`, `REPEAT ... UNTIL`,  
+`SWITCH ... CASE ... SWEND`,  
+`DO ... DEND`, `BREAK`, `CONT`
+
+### Filesystem (DOS‑style)
+`CATALOG`, `DELETE`, `OPEN`, `CLOSE`, `FDISK`,  
+`SAVE`, `LOAD`, `DUMP` (memory dump)
+
+### Arduino / MCU I/O
+`PINM` (pinMode), `DWRITE`, `DREAD`, `AWRITE`, `AREAD`,  
+`DELAY`, `MILLIS`, `TONE`, `PULSE`, `AZERO`, `LED`
+
+> Example: `PINM 13,1` (output), `DWRITE 13,1` (ON), `DWRITE 13,0` (OFF)
+
+### Graphics (if a graphics display is present/compiled)
+`COLOR`, `PLOT`, `LINE`, `RECT`, `FRECT`, `CIRCLE`, `FCIRCLE`, `LOCATE`, `CLS`
+
+### Timers, events
+`AFTER`, `EVERY`, `EVENT` (attach Arduino interrupts where available)
+
+### IoT / Wire / Sensors (compile‑time dependent)
+`AVAIL` (bytes available), `ERROR` (I/O error),  
+`WIRE`/`F.WIRE` (I²C tools), `SLEEP`, `NETSTAT`, `SENSOR`
+
+### Low‑level / advanced
+`USR`, `CALL` (jump into C routines if enabled),  
+`MALLOC`, `FIND`, `EVAL`, `CAM` (if camera build)
+
+### Math (floating point where enabled)
+`SIN`, `COS`, `TAN`, `ATAN`, `LOG`, `EXP`, `INT`
+
+---
+
+## Usage examples
+
+### 1) Hello + save/load
+```basic
+10 PRINT "Hello World!!"
+SAVE "HELLO"
+NEW
+LOAD "HELLO"
+RUN
+```
+
+### 2) Blink the built‑in LED (pin 13)
+```basic
+10 PINM 13,1
+20 DWRITE 13,1
+30 DELAY 500
+40 DWRITE 13,0
+50 DELAY 500
+60 GOTO 20
+```
+
+### 3) Read an analog pin & print a bar
+```basic
+10 A = AREAD A0
+20 N = A / 32
+30 S$ = ""
+40 FOR I = 1 TO N : S$ = S$ + "*" : NEXT
+50 PRINT "A0=";A; " "; S$
+60 DELAY 100
+70 GOTO 10
+```
+
+### 4) Structured loop + condition
+```basic
+10 X=0
+20 WHILE X<10
+30   PRINT "X=";X
+40   X=X+1
+50 WEND
+```
+
+### 5) Timed message (EVERY 1s)
+```basic
+10 T=0
+20 EVERY 1000,100 GOSUB 1000
+30 GOTO 30
+1000 T=T+1 : PRINT "Tick";T : RETURN
+```
+
+### 6) Filesystem listing and delete
+```basic
+CATALOG
+DELETE "OLDPRG"
+```
+
+---
+
+## Troubleshooting
+
+**Banner looks staggered / doubled**  
+→ In Tera Term: **Setup → Terminal → New‑line → Receive = LF**.  
+Then press `Enter` a couple times.
+
+**Nothing prints / wrong port**  
+→ Check Arduino IDE **Tools → Port**, then reconnect Tera Term to that COM port.
+
+**`SAVE`/`LOAD` fails**  
+→ Ensure a USB thumb drive is inserted and mounted. If absent, BASIC will show an error and continue. Try different drive or format FAT/FAT32.
+
+**Weird characters / accents**  
+→ Use a **monospace** font and UTF‑8 encoding in your terminal. Ensure Local Echo is **OFF**.
+
+**Backspace not working**  
+→ In Tera Term: **Backspace = DEL (127)**.
+
+---
+
+## Known limitations
+
+- Only **one** active filesystem at a time (`&16` = USB mass storage for this build).
+- Some advanced commands depend on optional libraries or hardware (graphics, camera, sensors).
+- Filenames are best kept short (8.3) for broadest compatibility.
+
+---
+
+## Credits
+
+- Original interpreter: **Stefan Lenz** — https://github.com/slviajero/tinybasic  
+- This GIGA‑focused fork: community tweaks for serial UX and USB storage.  
+- Thanks to contributors and testers who validated Tera Term settings and GIGA behavior.
+
+---
+
+## License
+
+GPLv3 — see the upstream repo and included license files.
