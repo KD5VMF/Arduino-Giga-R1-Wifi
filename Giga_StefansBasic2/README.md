@@ -17,6 +17,7 @@ A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Ardui
 - [BASIC language — full command set](#basic-language--full-command-set)
 - [HELP / Keywords](#help--keywords)
 - [Usage examples](#usage-examples)
+- [Prime Finder Example](#prime-finder-example)
 - [Troubleshooting](#troubleshooting)
 - [Known limitations](#known-limitations)
 - [Credits](#credits)
@@ -31,6 +32,7 @@ A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Ardui
   - **Safe-fail**: if no USB drive is present or filesystem is unavailable, commands print a clear error and the interpreter keeps running.
 - ✅ Solid default serial UX for **Tera Term** / PuTTY / minicom
 - ✅ Full language set enabled (see below)
+- ⚠️ Still improving ease-of-use with **Tera Term and other terminals** (banner alignment, CR/LF handling).  
 
 ---
 
@@ -82,7 +84,8 @@ If the banner looks “stair-stepped” or duplicated, see **Tera Term setup** b
 
 4) **Setup → Save setup…** (so the settings persist).
 
-> If your output still looks off: press `Enter` a few times to resync, then verify **Receive = LF** is set.
+> If your output still looks off: press `Enter` a few times to resync, then verify **Receive = LF** is set.  
+> We are still refining this experience for easier setup in Tera Term and similar terminals.
 
 ---
 
@@ -146,62 +149,7 @@ Handy DOS-like helpers:
 
 Commands are case-insensitive. Availability of some features depends on the hardware & compile options, but this GIGA build ships the **full** set by default.
 
-### Core
-`PRINT`, `LET`, `INPUT`, `GOTO`, `GOSUB`, `RETURN`,  
-`IF ... THEN ... [ELSE ...]`,  
-`FOR ... TO ... [STEP ...]` / `NEXT`,  
-`STOP`, `LIST`, `NEW`, `RUN`, `REM`
-
-### Numeric & utility
-`ABS`, `RND`, `SIZE` (free memory), `SGN`, `INT`, `SQR`, `POW`, `MAP`
-
-### Variables, arrays, strings
-`DIM`, `CLR`, `HIMEM`, `PEEK`, `POKE`, `TAB`, `LEN`,  
-`STR$`, `VAL`, `INSTR`, substring `X$(i TO j)`
-
-### Program/data
-`DATA`, `READ`, `RESTORE`,  
-`DEF FN ... FEND` (user functions), `FN`, `ON ... GOTO/GOSUB`
-
-### Control flow (structured)
-`WHILE ... WEND`, `REPEAT ... UNTIL`,  
-`SWITCH ... CASE ... SWEND`,  
-`DO ... DEND`, `BREAK`, `CONT`
-
-### Filesystem (DOS-style)
-`CATALOG`, `DELETE`, `OPEN`, `CLOSE`, `FDISK`,  
-`SAVE`, `LOAD`, `DUMP` (memory dump)
-
-### Arduino / MCU I/O
-`PINM` (pinMode), `DWRITE`, `DREAD`, `AWRITE`, `AREAD`,  
-`DELAY`, `MILLIS`, `TONE`, `PULSE`, `AZERO`, `LED`
-
-Example:  
-```basic
-10 PINM 13,1
-20 DWRITE 13,1
-30 DELAY 500
-40 DWRITE 13,0
-50 DELAY 500
-60 GOTO 20
-```
-
-### Graphics (if a graphics display is present/compiled)
-`COLOR`, `PLOT`, `LINE`, `RECT`, `FRECT`, `CIRCLE`, `FCIRCLE`, `LOCATE`, `CLS`
-
-### Timers, events
-`AFTER`, `EVERY`, `EVENT` (attach Arduino interrupts where available)
-
-### IoT / Wire / Sensors (compile-time dependent)
-`AVAIL` (bytes available), `ERROR` (I/O error),  
-`WIRE`/`F.WIRE` (I²C tools), `SLEEP`, `NETSTAT`, `SENSOR`
-
-### Low-level / advanced
-`USR`, `CALL` (jump into C routines if enabled),  
-`MALLOC`, `FIND`, `EVAL`, `CAM` (if camera build)
-
-### Math (floating point where enabled)
-`SIN`, `COS`, `TAN`, `ATAN`, `LOG`, `EXP`, `INT`
+(see detailed list above + HELP output)
 
 ---
 
@@ -267,39 +215,32 @@ RUN
 100 GOTO 40
 ```
 
-### 4) Read an analog pin & print a bar
+---
+
+## Prime Finder Example
+
+An optimized prime number calculator that runs forever and prints only **real primes**:
+
 ```basic
-10 A = AREAD A0
-20 N = A / 32
-30 S$ = ""
-40 FOR I = 1 TO N : S$ = S$ + "*" : NEXT
-50 PRINT "A0=";A; " "; S$
-60 DELAY 100
-70 GOTO 10
+10 PRINT "PRIME FINDER - CTRL+C TO STOP"
+20 N=2
+30 F=0
+40 LIMIT=INT(SQR(N))
+50 FOR D=2 TO LIMIT
+60   R=N
+70   WHILE R>=D
+80     R=R-D
+90   WEND
+100  IF R=0 THEN F=1: GOTO 120
+110 NEXT D
+120 IF F=0 THEN PRINT N
+130 N=N+1
+140 GOTO 30
 ```
 
-### 5) Structured loop + condition
-```basic
-10 X=0
-20 WHILE X<10
-30   PRINT "X=";X
-40   X=X+1
-50 WEND
-```
-
-### 6) Timed message (EVERY 1s)
-```basic
-10 T=0
-20 EVERY 1000,100 GOSUB 1000
-30 GOTO 30
-1000 T=T+1 : PRINT "Tick";T : RETURN
-```
-
-### 7) Filesystem listing and delete
-```basic
-CATALOG
-DELETE "OLDPRG"
-```
+- Uses trial division up to **√N** for efficiency.  
+- Remainder check is done by repeated subtraction (since `MOD` isn’t in BASIC).  
+- Runs indefinitely, printing primes only.  
 
 ---
 
