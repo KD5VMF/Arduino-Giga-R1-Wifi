@@ -110,6 +110,7 @@ If the banner looks “stair‑stepped” or duplicated, see **Tera Term setup**
 - `&0` — Internal print buffer (readable as string via `@$`)
 - `&1` — USB Serial (your terminal)
 - `&16` — Filesystem (USB mass storage)
+- `Pins 86,87,88` — Onboard RGB LED (Red, Green, Blue)
 
 ---
 
@@ -174,7 +175,15 @@ Commands are case‑insensitive. Availability of some features depends on the ha
 `PINM` (pinMode), `DWRITE`, `DREAD`, `AWRITE`, `AREAD`,  
 `DELAY`, `MILLIS`, `TONE`, `PULSE`, `AZERO`, `LED`
 
-> Example: `PINM 13,1` (output), `DWRITE 13,1` (ON), `DWRITE 13,0` (OFF)
+Example:  
+```basic
+10 PINM 13,1
+20 DWRITE 13,1
+30 DELAY 500
+40 DWRITE 13,0
+50 DELAY 500
+60 GOTO 20
+```
 
 ### Graphics (if a graphics display is present/compiled)
 `COLOR`, `PLOT`, `LINE`, `RECT`, `FRECT`, `CIRCLE`, `FCIRCLE`, `LOCATE`, `CLS`
@@ -216,7 +225,21 @@ RUN
 60 GOTO 20
 ```
 
-### 3) Read an analog pin & print a bar
+### 3) Onboard RGB LED cycle (pins 86,87,88)
+```basic
+10 PRINT "Rotate pins 86,87,88"
+20 PINM 86,1: PINM 87,1: PINM 88,1
+30 LET T=250
+40 DWRITE 86,0: DWRITE 87,0: DWRITE 88,0
+50 FOR P=86 TO 88
+60 DWRITE 86,0: DWRITE 87,0: DWRITE 88,0
+70 DWRITE P,1
+80 DELAY T
+90 NEXT P
+100 GOTO 40
+```
+
+### 4) Read an analog pin & print a bar
 ```basic
 10 A = AREAD A0
 20 N = A / 32
@@ -227,7 +250,7 @@ RUN
 70 GOTO 10
 ```
 
-### 4) Structured loop + condition
+### 5) Structured loop + condition
 ```basic
 10 X=0
 20 WHILE X<10
@@ -236,7 +259,7 @@ RUN
 50 WEND
 ```
 
-### 5) Timed message (EVERY 1s)
+### 6) Timed message (EVERY 1s)
 ```basic
 10 T=0
 20 EVERY 1000,100 GOSUB 1000
@@ -244,7 +267,7 @@ RUN
 1000 T=T+1 : PRINT "Tick";T : RETURN
 ```
 
-### 6) Filesystem listing and delete
+### 7) Filesystem listing and delete
 ```basic
 CATALOG
 DELETE "OLDPRG"
