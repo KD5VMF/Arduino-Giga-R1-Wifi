@@ -1,4 +1,4 @@
-# 📘 Stefan’s BASIC 2.0 — Arduino **GIGA R1 WiFi** Edition  
+# 📘 Stefan’s BASIC 2.0 — Arduino **GIGA R1 WiFi** Edition
 *A Complete Handbook / Full Manual*
 
 ```
@@ -11,126 +11,126 @@
      Stefan’s BASIC 2.0 — GIGA R1 WiFi Edition
 ```
 
-A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Arduino GIGA R1 WiFi** with smooth serial terminal UX (e.g., **Tera Term**) and **USB mass-storage** save/load support.  
-This handbook serves as both **README** and **full user manual**.  
-
-> License: GPLv3 (same as upstream)
+A full-featured fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Arduino GIGA R1 WiFi** with serial terminal UX, RGB LED, USB mass‑storage, timers, filesystem commands, and optional graphics.
 
 ---
 
 ## 📑 Table of Contents
-- [Overview](#overview)
-- [Hardware & Software Prerequisites](#hardware--software-prerequisites)
-- [Build & Flash](#build--flash)
-- [Terminal Setup](#terminal-setup)
-  - [Tera Term (Windows)](#tera-term-setup-windows)
-  - [PuTTY / minicom (Linux/macOS)](#putty--minicom-linuxmacos)
-- [I/O Channels](#io-channels)
-- [Storage & Filesystem](#storage--filesystem)
-- [HELP / Keywords](#help--keywords)
-- [Command Reference (Grouped)](#command-reference-grouped)
-- [Usage Examples](#usage-examples)
-- [Prime Finder Example](#prime-finder-example)
-- [Troubleshooting](#troubleshooting)
-- [Known Limitations](#known-limitations)
-- [Credits](#credits)
-- [License](#license)
+- Overview
+- Hardware & Software Prerequisites
+- Build & Flash
+- Terminal Setup (Tera Term, PuTTY, minicom)
+- I/O Channels
+- Filesystem & Storage
+- Command Reference (Grouped, All Explained)
+- Usage Examples (Programs)
+- Prime Finder Example
+- Troubleshooting
+- FAQ
+- Known Limitations
+- History & Credits
+- License
 
 ---
 
-## Overview
-- ✅ **Arduino GIGA R1 WiFi** support (MBed core)
-- ✅ **USB Mass Storage** support (`&16` channel)
-- ✅ **Improved Serial UX** for Tera Term / PuTTY / minicom
-- ✅ **Full BASIC 2.0 Command Set**
-- ⚠️ Still improving ease-of-use with CR/LF handling in Tera Term
-
----
-
-## Hardware & Software Prerequisites
+# 🔧 Hardware & Software Prerequisites
 - Arduino **GIGA R1 WiFi**
-- Arduino IDE 2.x
-- Arduino Mbed OS GIGA Core
-- USB-C cable
+- Arduino IDE 2.x (or CLI)
+- Arduino Mbed OS GIGA core
+- USB‑C data cable
 - Optional: USB thumb drive (FAT/FAT32)
-- Terminal: Tera Term / PuTTY / minicom
+- Terminal: Tera Term (Windows) / PuTTY / minicom
 
 ---
 
-## Build & Flash
-1. Open `Basic2/IoTBasic/IoTBasic.ino` in Arduino IDE  
-2. Select **Board:** `Arduino GIGA R1 WiFi`  
-3. Select **Port**  
-4. Upload the sketch
-
-On boot:
+# 🖥️ Terminal Setup (ASCII Diagram)
 ```
-Stefan's Basic 2.0  Memory 65535  EEPROM 0
-Language set: full
-IO: 0 1 16
->
+Tera Term → Setup → Serial port
+  Speed = 9600
+  Flow control = none
+
+Tera Term → Setup → Terminal
+  Receive = LF
+  Transmit = CR+LF
+  Local echo = OFF
+  Auto wrap = ON
+  Size = 80x24
+  Backspace = DEL(127)
 ```
 
 ---
 
-## Terminal Setup
-
-### Tera Term Setup (Windows)
-- Speed: `9600`
-- Flow control: none
-- Terminal → Receive: `LF`
-- Transmit: `CR+LF`
-- Auto wrap: ON
-- Local echo: OFF
-- Terminal size: `80 x 24`
-
-### PuTTY / minicom (Linux/macOS)
-- PuTTY: Serial line = COM port, Speed = 9600, Implicit CR in LF enabled
-- minicom:  
-  ```bash
-  minicom -D /dev/ttyACM0 -b 9600
-  ```
+# 🔌 I/O Channels
+- &0 — Internal buffer
+- &1 — USB Serial (terminal)
+- &16 — Filesystem (USB mass storage)
+- Pins 86,87,88 — Onboard RGB LED (R,G,B)
 
 ---
 
-## I/O Channels
-- `&0` — Internal buffer
-- `&1` — USB Serial
-- `&16` — Filesystem (USB drive)
-- Pins 86/87/88 — Onboard RGB LED
+# 💾 Filesystem Diagram
+```
+USB Mass Storage (FAT/FAT32)
+ ├── HELLO.BAS   (saved program)
+ ├── PRIME.BAS   (prime finder)
+ ├── GAME1.BAS   (tic-tac-toe)
+ └── DATA.DAT    (user data)
+```
+
+Commands: SAVE, LOAD, CATALOG, DELETE, OPEN, CLOSE, FDISK.
 
 ---
 
-## Storage & Filesystem
-- `SAVE`, `LOAD`, `CATALOG`, `DELETE`, `FDISK`
-- Errors are safe: interpreter continues
+# 📜 Command Reference (Grouped, All Explained)
 
----
+## Program Control
+PRINT, LET, INPUT, GOTO, GOSUB, RETURN, IF, FOR...NEXT, STOP, LIST, NEW, RUN, REM  
+➡ Control flow, branching, loops, comments.  
+**Example:**  
+```basic
+10 FOR I=1 TO 10
+20 PRINT I
+30 NEXT
+```
 
-## HELP / Keywords
-Full keyword set: `PRINT LET INPUT GOTO GOSUB RETURN IF FOR TO STEP NEXT STOP LIST NEW RUN ABS RND SIZE REM NOT AND OR LEN SGN PEEK DIM CLR HIMEM TAB THEN END POKE CONT SQR POW MAP DUMP BREAK SAVE LOAD GET PUT SET CLS LOCATE ELSE PINM DWRITE DREAD AWRITE AREAD DELAY MILLIS AZERO LED PLAY PULSE CATALOG DELETE OPEN CLOSE FDISK USR CALL SIN COS TAN ATAN LOG EXP INT DATA READ RESTORE DEF FN ON MALLOC FIND EVAL ERROR AVAIL STR INSTR VAL NETSTAT SENSOR WIRE SLEEP AFTER EVERY EVENT WHILE WEND REPEAT UNTIL SWITCH CASE SWEND DO DEND FEND ASC CHR RIGHT LEFT MID SPC EDIT HELP << >> BIT`
+## Math & Numeric
+ABS, RND, SIZE, SGN, INT, SQR, POW, MAP, SIN, COS, TAN, ATAN, LOG, EXP  
+➡ Standard math functions and random numbers.  
+**Example:**  
+```basic
+10 X = RND(100)
+20 PRINT "Random:";X
+```
 
----
+## Variables & Memory
+DIM, CLR, HIMEM, PEEK, POKE, MALLOC, FIND, EVAL  
+➡ Array allocation, memory peek/poke, dynamic allocation.  
 
-## Command Reference (Grouped)
-*(each group explained in full in manual)*
+## Strings & Text
+LEN, STR$, VAL, INSTR, ASC, CHR, RIGHT, LEFT, MID, SPC, TAB  
+➡ String handling.  
+**Example:**  
+```basic
+10 A$="HELLO"
+20 PRINT LEFT(A$,3)
+```
 
-- **Program Control:** PRINT, LET, GOTO, IF, FOR/NEXT…  
-- **Math:** ABS, RND, POW, SQR…  
-- **Memory & Variables:** DIM, PEEK, POKE, CLR…  
-- **Strings:** LEN, STR$, VAL, MID, LEFT, RIGHT…  
-- **Structured Flow:** WHILE/WEND, REPEAT/UNTIL, SWITCH/CASE…  
-- **Filesystem:** SAVE, LOAD, CATALOG, DELETE…  
-- **Arduino I/O:** PINM, DWRITE, DREAD, LED, AREAD…  
-- **Timers & Events:** DELAY, MILLIS, EVERY, AFTER…  
-- **Networking & Sensors:** NETSTAT, SENSOR, WIRE…  
-- **Advanced:** USR, CALL, MALLOC, EVAL…  
+## Structured Flow
+WHILE/WEND, REPEAT/UNTIL, SWITCH/CASE, DO/DEND, DEF FN/FEND, CONT, BREAK  
+➡ Structured programming constructs.
 
----
+## Data Handling
+DATA, READ, RESTORE, GET, PUT, SET  
+➡ Store and retrieve inline data.  
 
-## Usage Examples
+## Filesystem
+CATALOG, DELETE, OPEN, CLOSE, FDISK, SAVE, LOAD, DUMP  
+➡ File storage on USB.
 
-### Blink LED (pin 13)
+## Arduino / MCU I/O
+PINM, DWRITE, DREAD, AWRITE, AREAD, DELAY, MILLIS, AZERO, LED, PLAY, PULSE, TONE  
+➡ Pin I/O, timing, analog/digital ops, buzzer control.  
+**LED Example (pin 13):**  
 ```basic
 10 PINM 13,1
 20 DWRITE 13,1
@@ -140,51 +140,92 @@ Full keyword set: `PRINT LET INPUT GOTO GOSUB RETURN IF FOR TO STEP NEXT STOP LI
 60 GOTO 20
 ```
 
-### RGB LED cycle (pins 86–88)
+**RGB Example (pins 86,87,88):**  
 ```basic
-10 PINM 86,1:PINM 87,1:PINM 88,1
-20 FOR P=86 TO 88
-30 DWRITE 86,0:DWRITE 87,0:DWRITE 88,0
-40 DWRITE P,1
-50 DELAY 300
-60 NEXT P
-70 GOTO 20
+10 PRINT "Rotate pins 86,87,88"
+20 PINM 86,1:PINM 87,1:PINM 88,1
+30 LET T=250
+40 FOR P=86 TO 88
+50 DWRITE 86,0:DWRITE 87,0:DWRITE 88,0
+60 DWRITE P,1
+70 DELAY T
+80 NEXT P
+90 GOTO 40
 ```
+
+## Timers & Events
+AFTER, EVERY, EVENT, SLEEP, MILLIS  
+➡ Scheduling timed events.  
+**Example:**  
+```basic
+10 EVERY 1000,100 GOSUB 1000
+20 GOTO 20
+1000 PRINT "Tick!" : RETURN
+```
+
+## Networking & Sensors
+NETSTAT, SENSOR, WIRE (I2C), AVAIL, ERROR  
+➡ Networking, I²C, and hardware sensors.
+
+## Advanced
+USR, CALL, CAM, EDIT, HELP, BIT, <<, >>  
+➡ System extensions, editing, bit shifts.
 
 ---
 
-## Prime Finder Example
+# 🧮 Usage Examples
+
+## Hello + Save/Load
+```basic
+10 PRINT "HELLO WORLD!!"
+SAVE "HELLO"
+NEW
+LOAD "HELLO"
+RUN
+```
+
+## Prime Finder (infinite)
 ```basic
 10 N=2
-20 FOR I=2 TO N/2
-30 IF N MOD I=0 THEN GOTO 60
-40 NEXT I
-50 PRINT N
-60 N=N+1
-70 GOTO 20
+20 F=0
+30 FOR D=2 TO SQR(N)
+40 IF N MOD D=0 THEN F=1:EXIT FOR
+50 NEXT
+60 IF F=0 THEN PRINT N
+70 N=N+1:F=0
+80 GOTO 30
 ```
 
 ---
 
-## Troubleshooting
-- **Stair-step banner** → Set Tera Term Receive=LF  
-- **SAVE/LOAD fails** → Insert FAT32 USB stick  
-- **Backspace wrong** → Set Backspace=DEL (127)
+# 🛠️ Troubleshooting
+- **Staggered banner** → Set Receive=LF in terminal.  
+- **SAVE/LOAD fail** → Ensure USB drive is inserted + FAT/FAT32.  
+- **Weird chars** → Use monospace font, UTF-8 encoding.  
+- **Backspace** → DEL(127).  
 
 ---
 
-## Known Limitations
-- Single filesystem at a time  
-- Filenames best in 8.3 format  
-- Graphics/sensor commands depend on libraries
+# ❓ FAQ
+- **Q: Can I use long filenames?** → Stick to 8.3 for best compatibility.  
+- **Q: Can I save to internal flash?** → No, only USB storage in this build.  
+- **Q: What’s EEPROM?** → Reserved, not used in this fork.  
 
 ---
 
-## Credits
-- Stefan Lenz (original Tiny BASIC)  
-- GIGA fork contributors  
+# ⚠️ Known Limitations
+- One filesystem at a time (`&16` = USB mass storage).  
+- Some advanced commands depend on optional hardware.  
+- Keep filenames short.  
 
 ---
 
-## License
-GPLv3  
+# 📜 History & Credits
+- Stefan Lenz — Original Tiny BASIC  
+- KD5VMF — Arduino GIGA fork + handbook  
+- ChatGPT — Documentation & co-development partner  
+
+---
+
+# 📖 License
+GPLv3 — see upstream repo and included LICENSE file.
