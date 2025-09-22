@@ -1,6 +1,6 @@
 # Stefan’s BASIC 2.0 — Arduino **GIGA R1 WiFi** Edition
 
-A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Arduino GIGA R1 WiFi** with smooth serial terminal UX (e.g., **Tera Term**) and **USB mass‑storage** save/load support. You get the classic BASIC feel with modern I/O, timers, filesystem commands, and optional graphics.
+A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Arduino GIGA R1 WiFi** with smooth serial terminal UX (e.g., **Tera Term**) and **USB mass-storage** save/load support. You get the classic BASIC feel with modern I/O, timers, filesystem commands, and optional graphics.
 
 > License: GPLv3 (same as upstream)
 
@@ -15,6 +15,7 @@ A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Ardui
 - [I/O channels in this build](#io-channels-in-this-build)
 - [Storage / filesystem](#storage--filesystem)
 - [BASIC language — full command set](#basic-language--full-command-set)
+- [HELP / Keywords](#help--keywords)
 - [Usage examples](#usage-examples)
 - [Troubleshooting](#troubleshooting)
 - [Known limitations](#known-limitations)
@@ -27,7 +28,7 @@ A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Ardui
 
 - ✅ **GIGA R1 WiFi** support (MBed core)
 - ✅ **USB Mass Storage** filesystem (`&16`) for `SAVE`, `LOAD`, `CATALOG`, etc.  
-  - **Safe‑fail**: if no USB drive is present or filesystem is unavailable, commands print a clear error and the interpreter keeps running.
+  - **Safe-fail**: if no USB drive is present or filesystem is unavailable, commands print a clear error and the interpreter keeps running.
 - ✅ Solid default serial UX for **Tera Term** / PuTTY / minicom
 - ✅ Full language set enabled (see below)
 
@@ -38,7 +39,7 @@ A friendly fork of Stefan Lenz’s Tiny BASIC interpreter, tuned for the **Ardui
 - **Board:** Arduino **GIGA R1 WiFi**
 - **IDE:** Arduino IDE 2.x (or CLI)
 - **Core:** Arduino Mbed OS GIGA (install via Boards Manager)
-- **Cable:** USB‑C data cable
+- **Cable:** USB-C data cable
 - **Optional storage:** USB thumb drive (FAT/FAT32 recommended)
 - **Terminal:** Tera Term (Windows) / PuTTY / minicom / screen
 
@@ -59,7 +60,7 @@ IO: 0 1 16
 >
 ```
 
-If the banner looks “stair‑stepped” or duplicated, see **Tera Term setup** below.
+If the banner looks “stair-stepped” or duplicated, see **Tera Term setup** below.
 
 ---
 
@@ -71,8 +72,8 @@ If the banner looks “stair‑stepped” or duplicated, see **Tera Term setup**
    - **Flow control:** `none`
 
 3) **Setup → Terminal…**
-   - **New‑line → Receive = `LF`**  ✅ *(this fixes the stair‑step banner)*
-   - **New‑line → Transmit = `CR+LF`**
+   - **New-line → Receive = `LF`**  ✅ *(this fixes the stair-step banner)*
+   - **New-line → Transmit = `CR+LF`**
    - **Local echo = `OFF`**
    - **Auto wrap = `ON`**
    - **Terminal size = `80 x 24`** (or 25)
@@ -131,11 +132,11 @@ RUN
 If there’s **no USB drive** or it **can’t be mounted**:
 - Commands such as `LOAD`, `SAVE`, `CATALOG` **print a clear error** (e.g., `Filesystem not available` or `File not found`) and **continue running**.
 
-Handy DOS‑like helpers:
+Handy DOS-like helpers:
 - `CATALOG` – list files
 - `DELETE "NAME"` – delete a file
 - `FDISK` – format/initialize (where supported)
-- `OPEN` / `CLOSE` – low‑level file streams when needed
+- `OPEN` / `CLOSE` – low-level file streams when needed
 
 > Tip: Use simple 8.3 file names where possible for maximum compatibility.
 
@@ -143,7 +144,7 @@ Handy DOS‑like helpers:
 
 ## BASIC language — full command set
 
-Commands are case‑insensitive. Availability of some features depends on the hardware & compile options, but this GIGA build ships the **full** set by default.
+Commands are case-insensitive. Availability of some features depends on the hardware & compile options, but this GIGA build ships the **full** set by default.
 
 ### Core
 `PRINT`, `LET`, `INPUT`, `GOTO`, `GOSUB`, `RETURN`,  
@@ -167,7 +168,7 @@ Commands are case‑insensitive. Availability of some features depends on the ha
 `SWITCH ... CASE ... SWEND`,  
 `DO ... DEND`, `BREAK`, `CONT`
 
-### Filesystem (DOS‑style)
+### Filesystem (DOS-style)
 `CATALOG`, `DELETE`, `OPEN`, `CLOSE`, `FDISK`,  
 `SAVE`, `LOAD`, `DUMP` (memory dump)
 
@@ -191,16 +192,43 @@ Example:
 ### Timers, events
 `AFTER`, `EVERY`, `EVENT` (attach Arduino interrupts where available)
 
-### IoT / Wire / Sensors (compile‑time dependent)
+### IoT / Wire / Sensors (compile-time dependent)
 `AVAIL` (bytes available), `ERROR` (I/O error),  
 `WIRE`/`F.WIRE` (I²C tools), `SLEEP`, `NETSTAT`, `SENSOR`
 
-### Low‑level / advanced
+### Low-level / advanced
 `USR`, `CALL` (jump into C routines if enabled),  
 `MALLOC`, `FIND`, `EVAL`, `CAM` (if camera build)
 
 ### Math (floating point where enabled)
 `SIN`, `COS`, `TAN`, `ATAN`, `LOG`, `EXP`, `INT`
+
+---
+
+## HELP / Keywords
+
+The `HELP` command in this build prints:
+
+```
+Stefan's Basic 2.0  Memory 65535  EEPROM 0
+Language set: full
+IO: 0 1 16
+Keywords: => <= <> PRINT LET INPUT GOTO GOSUB
+RETURN IF FOR TO STEP NEXT STOP LIST
+NEW RUN ABS RND SIZE REM NOT AND
+OR LEN SGN PEEK DIM CLR HIMEM TAB
+THEN END POKE CONT SQR POW MAP DUMP
+BREAK SAVE LOAD GET PUT SET CLS LOCATE
+ELSE PINM DWRITE DREAD AWRITE AREAD DELAY MILLIS
+AZERO LED PLAY PULSE CATALOG DELETE OPEN CLOSE
+FDISK USR CALL SIN COS TAN ATAN LOG
+EXP INT DATA READ RESTORE DEF FN ON
+MALLOC FIND EVAL ERROR AVAIL STR INSTR VAL
+NETSTAT SENSOR WIRE SLEEP AFTER EVERY EVENT WHILE
+WEND REPEAT UNTIL SWITCH CASE SWEND DO DEND
+FEND ASC CHR RIGHT LEFT MID SPC EDIT
+HELP << >> BIT
+```
 
 ---
 
@@ -215,7 +243,7 @@ LOAD "HELLO"
 RUN
 ```
 
-### 2) Blink the built‑in LED (pin 13)
+### 2) Blink the built-in LED (pin 13)
 ```basic
 10 PINM 13,1
 20 DWRITE 13,1
@@ -278,7 +306,7 @@ DELETE "OLDPRG"
 ## Troubleshooting
 
 **Banner looks staggered / doubled**  
-→ In Tera Term: **Setup → Terminal → New‑line → Receive = LF**.  
+→ In Tera Term: **Setup → Terminal → New-line → Receive = LF**.  
 Then press `Enter` a couple times.
 
 **Nothing prints / wrong port**  
@@ -288,7 +316,7 @@ Then press `Enter` a couple times.
 → Ensure a USB thumb drive is inserted and mounted. If absent, BASIC will show an error and continue. Try different drive or format FAT/FAT32.
 
 **Weird characters / accents**  
-→ Use a **monospace** font and UTF‑8 encoding in your terminal. Ensure Local Echo is **OFF**.
+→ Use a **monospace** font and UTF-8 encoding in your terminal. Ensure Local Echo is **OFF**.
 
 **Backspace not working**  
 → In Tera Term: **Backspace = DEL (127)**.
@@ -306,7 +334,7 @@ Then press `Enter` a couple times.
 ## Credits
 
 - Original interpreter: **Stefan Lenz** — https://github.com/slviajero/tinybasic  
-- This GIGA‑focused fork: community tweaks for serial UX and USB storage.  
+- This GIGA-focused fork: community tweaks for serial UX and USB storage.  
 - Thanks to contributors and testers who validated Tera Term settings and GIGA behavior.
 
 ---
